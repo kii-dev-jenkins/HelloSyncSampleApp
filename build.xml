@@ -81,5 +81,6 @@
     -->
     <!-- version-tag: custom -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
+    <import file="archive.xml" />
 
 </project>

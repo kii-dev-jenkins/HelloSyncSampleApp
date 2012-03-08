@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kii.example.sync"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="8" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
+    <!-- Authority should be com.kii.sync.generic.{APPLICATION ID} -->
+
+    <!--
+    <provider
+        android:authorities="com.kii.sync.generic.d250d1c1"
+        android:name="com.kii.sync.provider.GenericSyncProvider">
+        <meta-data
+            android:name="app-key"
+            android:value="a7d82e1181318f1f037fd4fde1af5669" />
+    </provider>
+    -->
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:label="@string/app_name"
+            android:name=".HelloSyncActivity" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Service Used for Sync -->
+        <service android:name="com.synclore.android.pfscsdk.PFSyncService" >
+            <intent-filter >
+                <action android:name="com.synclore.android.pfscsdk.ISessionManager" />
+                <action android:name="com.synclore.android.pfscsdk.IChangeLogger" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.synclore.android.pfscsdk.PFSyncService.preferences"
+                android:resource="@xml/pfsyncservice_preferences" />
+            <meta-data
+                android:name="com.synclore.android.pfscsdk.PFSyncService.logconfig"
+                android:resource="@xml/pfsyncservice_logconfig" />
+        </service>
+
+        <provider
+            android:authorities="com.kii.sync.generic.d250d1c1"
+            android:label="generic content provider"
+            android:name="com.kii.sync.provider.GenericSyncProvider" >
+            <meta-data
+                android:name="app-key"
+                android:value="a7d82e1181318f1f037fd4fde1af5669" />
+        </provider>
+
+    </application>
+    <meta-data android:name="app-key" android:value="APPLICATION KEY" />
+
+</manifest>

@@ -21,6 +21,6 @@
         <mkdir dir="archive"/>
     </target>
 	<target name="archive" depends="archive_clean,mkdir,svn_version">
-        <zip destfile="archive/HelloSync-${svn.version}.zip" basedir="."/>
+        <zip destfile="archive/HelloSync-${svn.version}.zip" basedir="." excludes="bin,gen,archive,**/.svn" />
 	</target>
 </project>

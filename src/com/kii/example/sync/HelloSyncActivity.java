@@ -51,11 +51,13 @@ public class HelloSyncActivity extends Activity {
     }
 
     private void createUser() {
+        // Set Application ID and Application Key.
         EasyClient.start(this, "d250d1c1", "a7d82e1181318f1f037fd4fde1af5669");
         EasyClient.getInstance().setBaseURL("http://dev-usergrid.kii.com");
         authMan = EasyClient.getUserManager();
         KiiUser kUser = new KiiUser();
         UserResult res = null;
+        // Create User by communicating KiiCloud with User Manager SDK.
         try {
             kUser.setUsername("testUser");
             kUser.setEmail("testUser@testkii.com");
@@ -73,6 +75,7 @@ public class HelloSyncActivity extends Activity {
         }
         kUser = res.getKiiUser();
         KiiUMInfo umInfo = new KiiUMInfo(this, kUser.getUsername(), "1234", kUser.getType(), null);
+        // Pass the User Information to Sync SDK.
         kiiClient.setKiiUMInfo(umInfo);
     }
 

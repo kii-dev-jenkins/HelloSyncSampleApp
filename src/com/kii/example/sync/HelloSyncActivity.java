@@ -53,16 +53,8 @@ public class HelloSyncActivity extends Activity {
                 new Thread(new Runnable() {
                     public void run() {
                         createUser();
-                        myHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                new Thread(new Runnable() {
-                                    public void run() {
-                                        uploadFile();
-                                    }
-                                }).start();
-                            }
-                        });
+                        uploadFile();
+                        updateMain();
                     }
                 }).start();
             }
@@ -112,13 +104,6 @@ public class HelloSyncActivity extends Activity {
         if (ret != SyncMsg.OK) {
             throw new RuntimeException("Sync Failed! code: " + ret);
         }
-        myHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                updateMain();
-
-            }
-        });
     }
 
     private File createFile() {
@@ -138,16 +123,21 @@ public class HelloSyncActivity extends Activity {
     }
 
     private void updateMain() {
-        TextView linkURL = (TextView) HelloSyncActivity.this.findViewById(R.id.url_link);
-        MovementMethod method = LinkMovementMethod.getInstance();
-        linkURL.setMovementMethod(method);
+        myHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                TextView linkURL = (TextView) HelloSyncActivity.this.findViewById(R.id.url_link);
+                MovementMethod method = LinkMovementMethod.getInstance();
+                linkURL.setMovementMethod(method);
 
-        linkURL.setText(getLink());
-        linkURL.setVisibility(View.VISIBLE);
+                linkURL.setText(getLink());
+                linkURL.setVisibility(View.VISIBLE);
 
-        EditText userNameET = (EditText)HelloSyncActivity.this.findViewById(R.id.username_disp);
-        userNameET.setText(userName);
-        userNameET.setVisibility(View.VISIBLE);
+                EditText userNameET = (EditText)HelloSyncActivity.this.findViewById(R.id.username_disp);
+                userNameET.setText(userName);
+                userNameET.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private CharSequence getLink() {
@@ -160,7 +150,9 @@ public class HelloSyncActivity extends Activity {
                         Base64.encodeToString(
                                 (appId + ":" + appKey).getBytes(),
                                 Base64.DEFAULT)).build().toString();
-        String htmlLink = "<a href=\"" + lUrl + "\">Sync Success! on Web UI you can see the data uploaded!\nPlease copy user name bellow before click.</a>";
+        String htmlLink = "<a href=\""
+                + lUrl
+                + "\">Sync Success! on Web UI you can see the data uploaded!\nPlease copy user name bellow before click.</a>";
         CharSequence seq = Html.fromHtml(htmlLink);
         return seq;
     }

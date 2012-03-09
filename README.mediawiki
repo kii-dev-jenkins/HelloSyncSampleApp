@@ -24,13 +24,13 @@
 ** AndroidManifest.xml
 <br/>
 permission under <manifest> element:
-<code>
+<pre>
 <uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-</code>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+</pre>
 <br/>
 sync service under <application> element:
-<code>
+<pre>
 <application>
 .....
         <service android:name="com.synclore.android.pfscsdk.PFSyncService" >
@@ -48,14 +48,14 @@ sync service under <application> element:
         </service>
 .....
 </application>
-</code>
+</pre>
 
 <br/>
 Sync content provider under <application> element:
 
 <br/>
 NOTE: where {APPLICATION_ID} and {APPLICATION_KEY} must be replaced with your Application Key and Application ID.
-<code>
+<pre>
 <application>
 .....
         <provider
@@ -68,12 +68,12 @@ NOTE: where {APPLICATION_ID} and {APPLICATION_KEY} must be replaced with your Ap
         </provider>
 .....
 </application>
-</code>
+</pre>
 
 === Create an application user ===
 
 Look into HelloSyncActivity.java
-<code>
+<pre>
     private void createUser() {
         // Set Application ID and Application Key.
         EasyClient.start(this, appId, appKey);
@@ -100,12 +100,12 @@ Look into HelloSyncActivity.java
         // Pass the User Information to Sync SDK.
         kiiClient.setKiiUMInfo(umInfo);
     }
-</code>
+</pre>
 
 === Upload file by Sync SDK ===
 
 Look into HelloSyncActivity.java
-<code>
+<pre>
     private void uploadFile() {
         try {
             kiiClient.initSync();
@@ -123,7 +123,7 @@ Look into HelloSyncActivity.java
             throw new RuntimeException("Sync Failed! code: " + ret);
         }
     }
-</code>
+</pre>
 
 === Confirm data that has uploaded ===
 

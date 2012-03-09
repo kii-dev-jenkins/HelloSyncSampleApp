@@ -11,22 +11,33 @@ import com.kii.cloud.storage.EasyClient;
 import com.kii.cloud.storage.dataType.KiiUser;
 import com.kii.cloud.storage.manager.AuthManager;
 import com.kii.cloud.storage.response.CloudExecutionException;
-import com.kii.cloud.storage.response.UserResult;
 import com.kii.mobilesdk.bridge.KiiUMInfo;
 import com.kii.sync.KiiClient;
 import com.kii.sync.KiiFile;
 import com.kii.sync.KiiFileUtil;
 import com.kii.sync.SyncMsg;
+import com.kii.sync.utils.Base64;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class HelloSyncActivity extends Activity {
     KiiClient kiiClient;
     AuthManager authMan;
     Handler myHandler;
+    String userName = "testUser";
+    public static final String appId = "c42a57d0";
+    public static final String appKey = "224b6595df9387530feb6f696a51c658";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,30 +50,37 @@ public class HelloSyncActivity extends Activity {
         myHandler.post(new Runnable() {
             @Override
             public void run() {
-                createUser();
-            }
-        });
-        myHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                uploadFile();
+                new Thread(new Runnable() {
+                    public void run() {
+                        createUser();
+                        myHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        uploadFile();
+                                    }
+                                }).start();
+                            }
+                        });
+                    }
+                }).start();
             }
         });
     }
 
     private void createUser() {
         // Set Application ID and Application Key.
-        EasyClient.start(this, "d250d1c1", "a7d82e1181318f1f037fd4fde1af5669");
-        EasyClient.getInstance().setBaseURL("http://dev-usergrid.kii.com");
+        EasyClient.start(this, appId, appKey);
+        EasyClient.getInstance().setBaseURL("http://dev-usergrid.kii.com:12110");
         authMan = EasyClient.getUserManager();
         KiiUser kUser = new KiiUser();
-        UserResult res = null;
         // Create User by communicating KiiCloud with User Manager SDK.
         try {
-            kUser.setUsername("testUser");
-            kUser.setEmail("testUser@testkii.com");
-            kUser.put("country", "JP");
-            res = authMan.createUser(kUser, "1234");
+            userName = userName + Long.toString(System.currentTimeMillis());
+            kUser.setUsername(userName);
+            authMan.createUser(kUser, "1234");
+            authMan.login(userName, "1234");
         } catch (CloudExecutionException e) {
             e.printStackTrace();
             throw new RuntimeException("Create user Failed!");
@@ -73,8 +91,7 @@ public class HelloSyncActivity extends Activity {
             e.printStackTrace();
             throw new RuntimeException("Create user Failed!");
         }
-        kUser = res.getKiiUser();
-        KiiUMInfo umInfo = new KiiUMInfo(this, kUser.getUsername(), "1234", kUser.getType(), null);
+        KiiUMInfo umInfo = new KiiUMInfo(this, userName, "1234", "KII_ID", userName);
         // Pass the User Information to Sync SDK.
         kiiClient.setKiiUMInfo(umInfo);
     }
@@ -93,8 +110,15 @@ public class HelloSyncActivity extends Activity {
         KiiFile kFile = KiiFileUtil.createKiiFileFromFile(txtFile.getAbsolutePath());
         int ret = kiiClient.upload(kFile);
         if (ret != SyncMsg.OK) {
-            throw new RuntimeException("Sync Failed!");
+            throw new RuntimeException("Sync Failed! code: " + ret);
         }
+        myHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                updateMain();
+
+            }
+        });
     }
 
     private File createFile() {
@@ -113,4 +137,31 @@ public class HelloSyncActivity extends Activity {
         return f;
     }
 
+    private void updateMain() {
+        TextView linkURL = (TextView) HelloSyncActivity.this.findViewById(R.id.url_link);
+        MovementMethod method = LinkMovementMethod.getInstance();
+        linkURL.setMovementMethod(method);
+
+        linkURL.setText(getLink());
+        linkURL.setVisibility(View.VISIBLE);
+
+        EditText userNameET = (EditText)HelloSyncActivity.this.findViewById(R.id.username_disp);
+        userNameET.setText(userName);
+        userNameET.setVisibility(View.VISIBLE);
+    }
+
+    private CharSequence getLink() {
+        Uri.Builder b = new Uri.Builder();
+        Log.v("HelloSync", Base64.encodeToString((appId+":"+appKey).getBytes(), Base64.DEFAULT));
+        String lUrl = b.scheme("http")
+                .authority("dev-usergrid.kii.com")
+                .appendQueryParameter(
+                        "app",
+                        Base64.encodeToString(
+                                (appId + ":" + appKey).getBytes(),
+                                Base64.DEFAULT)).build().toString();
+        String htmlLink = "<a href=\"" + lUrl + "\">Sync Success! on Web UI you can see the data uploaded!\nPlease copy user name bellow before click.</a>";
+        CharSequence seq = Html.fromHtml(htmlLink);
+        return seq;
+    }
 }

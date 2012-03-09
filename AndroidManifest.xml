@@ -37,12 +37,12 @@
 
         <!-- Authority should be com.kii.sync.generic.{APPLICATION ID} -->
         <provider
-            android:authorities="com.kii.sync.generic.d250d1c1"
+            android:authorities="com.kii.sync.generic.c42a57d0"
             android:label="generic content provider"
             android:name="com.kii.sync.provider.GenericSyncProvider" >
             <meta-data
                 android:name="app-key"
-                android:value="a7d82e1181318f1f037fd4fde1af5669" />
+                android:value="224b6595df9387530feb6f696a51c658" />
         </provider>
 
     </application>

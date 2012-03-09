@@ -8,5 +8,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/hello" />
+    <TextView
+        android:id="@+id/url_link"
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+    <EditText 
+        android:id="@+id/username_disp"
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

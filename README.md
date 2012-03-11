@@ -57,7 +57,7 @@ NOTE: where {APPLICATION_ID} and {APPLICATION_KEY} must be replaced with your Ap
     .....
     </application>
 
-## Create an application user
+### Create an application user
 
 Look into HelloSyncActivity.java
 
@@ -88,7 +88,7 @@ Look into HelloSyncActivity.java
         kiiClient.setKiiUMInfo(umInfo);
     }
 
-## Upload file by Sync SDK 
+### Upload file by Sync SDK 
 
 Look into HelloSyncActivity.java
 
@@ -110,7 +110,10 @@ Look into HelloSyncActivity.java
         }
     }
 
-## Confirm data that has uploaded
+### Confirm data that has uploaded
 
 * View the file on Web: Click the link on Sample app. It will appear after the upload succeeded.
 * View the file on PC Client: To be added.
+
+## Next step.
+* To see full functionality of SyncSDK: <http://static.kii.com/devportal/docs/sync/>

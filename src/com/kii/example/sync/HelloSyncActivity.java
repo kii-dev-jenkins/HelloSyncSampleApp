@@ -36,8 +36,10 @@ public class HelloSyncActivity extends Activity {
     AuthManager authMan;
     Handler myHandler;
     String userName = "testUser";
-    public static final String appId = "c42a57d0";
-    public static final String appKey = "224b6595df9387530feb6f696a51c658";
+    static final String PASSWORD = "1234";
+    static final String ACCOUNT_TYPE_KII = "KII_ID";
+    String appId;
+    String appKey;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,17 +64,23 @@ public class HelloSyncActivity extends Activity {
     }
 
     private void createUser() {
-        // Set Application ID and Application Key.
-        EasyClient.start(this, appId, appKey);
+        // Each time create new user.
+        userName = userName + Long.toString(System.currentTimeMillis());
+        KiiUMInfo umInfo = new KiiUMInfo(this, userName, PASSWORD, ACCOUNT_TYPE_KII, userName);
+
+        // Cache is for accessing WebUI later.
+        appId = umInfo.getAppId();
+        appKey = umInfo.getAppKey();
+
+        EasyClient.start(this, umInfo.getAppId(), umInfo.getAppKey());
         EasyClient.getInstance().setBaseURL("http://dev-usergrid.kii.com:12110");
         authMan = EasyClient.getUserManager();
         KiiUser kUser = new KiiUser();
         // Create User by communicating KiiCloud with User Manager SDK.
         try {
-            userName = userName + Long.toString(System.currentTimeMillis());
             kUser.setUsername(userName);
-            authMan.createUser(kUser, "1234");
-            authMan.login(userName, "1234");
+            authMan.createUser(kUser, PASSWORD);
+            authMan.login(userName, PASSWORD);
         } catch (CloudExecutionException e) {
             e.printStackTrace();
             throw new RuntimeException("Create user Failed!");
@@ -83,7 +91,6 @@ public class HelloSyncActivity extends Activity {
             e.printStackTrace();
             throw new RuntimeException("Create user Failed!");
         }
-        KiiUMInfo umInfo = new KiiUMInfo(this, userName, "1234", "KII_ID", userName);
         // Pass the User Information to Sync SDK.
         kiiClient.setKiiUMInfo(umInfo);
     }

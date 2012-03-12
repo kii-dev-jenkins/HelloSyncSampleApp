@@ -72,7 +72,7 @@ public class HelloSyncActivity extends Activity {
         appId = umInfo.getAppId();
         appKey = umInfo.getAppKey();
 
-        EasyClient.start(this, umInfo.getAppId(), umInfo.getAppKey());
+        EasyClient.start(this, appId, appKey);
         EasyClient.getInstance().setBaseURL("http://dev-usergrid.kii.com:12110");
         authMan = EasyClient.getUserManager();
         KiiUser kUser = new KiiUser();

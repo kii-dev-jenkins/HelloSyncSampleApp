@@ -36,8 +36,10 @@ public class HelloSyncActivity extends Activity {
     AuthManager authMan;
     Handler myHandler;
     String userName = "testUser";
+    String email ="helloSync@testkii.com";
     static final String PASSWORD = "1234";
     static final String ACCOUNT_TYPE_KII = "KII_ID";
+    static final String ACCOUNT_TYPE_EMAIL = "EMAIL";
     String appId;
     String appKey;
 
@@ -65,8 +67,8 @@ public class HelloSyncActivity extends Activity {
 
     private void createUser() {
         // Each time create new user.
-        userName = userName + Long.toString(System.currentTimeMillis());
-        KiiUMInfo umInfo = new KiiUMInfo(this, userName, PASSWORD, ACCOUNT_TYPE_KII, userName);
+        email = Long.toString(System.currentTimeMillis()) + email;
+        KiiUMInfo umInfo = new KiiUMInfo(this, email, PASSWORD, ACCOUNT_TYPE_EMAIL, email);
 
         // Cache is for accessing WebUI later.
         appId = umInfo.getAppId();
@@ -79,8 +81,9 @@ public class HelloSyncActivity extends Activity {
         // Create User by communicating KiiCloud with User Manager SDK.
         try {
             kUser.setUsername(userName);
+            kUser.setEmail(email);
             authMan.createUser(kUser, PASSWORD);
-            authMan.login(userName, PASSWORD);
+            authMan.login(email, PASSWORD);
         } catch (CloudExecutionException e) {
             e.printStackTrace();
             throw new RuntimeException("Create user Failed!");
@@ -141,7 +144,7 @@ public class HelloSyncActivity extends Activity {
                 linkURL.setVisibility(View.VISIBLE);
 
                 EditText userNameET = (EditText)HelloSyncActivity.this.findViewById(R.id.username_disp);
-                userNameET.setText(userName);
+                userNameET.setText(email);
                 userNameET.setVisibility(View.VISIBLE);
             }
         });

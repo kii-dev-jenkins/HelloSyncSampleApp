@@ -120,6 +120,6 @@ Look into HelloSyncActivity.java
 * To install PC Client (SyncBox) and see the upload data on PC:
     * Customize AppId/AppKey of SyncBox: <https://github.com/satoshikumano/SyncBoxDoc/blob/master/Products-SyncBox(PCsyncapplication)Custominstaller-13Mar12-1155AM-10.pdf>
     * Installation guide of SyncBox: <https://github.com/satoshikumano/SyncBoxDoc/blob/master/Products-SyncBox(PCsyncapplication)Overview-14Mar12-0638AM-12.pdf>
-    * If you want to try without customize SyncBox, using following appId, appKey on HelloSyncSampleApp.  
+    * If you want to try without customize SyncBox, please use following appId, appKey on HelloSyncSampleApp.  
     appId: 6b587cee  
     appKey: 82946bf6961f4e34d3a53bbc941ac115  

@@ -119,4 +119,4 @@ Look into HelloSyncActivity.java
 * To see full functionality of SyncSDK: <http://static.kii.com/devportal/docs/sync/>
 * To install PC Client (SyncBox) and see the upload data on PC:
     * Customize AppId/AppKey of SyncBox: <https://github.com/satoshikumano/SyncBoxDoc/blob/master/Products-SyncBox(PCsyncapplication)Custominstaller-13Mar12-1155AM-10.pdf>
-    * Installation guide of SyncBox: <https://github.com/satoshikumano/SyncBoxDoc/blob/master/Products-SyncBox(PCsyncapplication)Overview-13Mar12-1154AM-8.pdf>
+    * Installation guide of SyncBox: <https://github.com/satoshikumano/SyncBoxDoc/blob/master/Products-SyncBox(PCsyncapplication)Overview-14Mar12-0638AM-12.pdf>

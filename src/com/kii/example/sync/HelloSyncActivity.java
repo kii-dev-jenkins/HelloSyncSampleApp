@@ -68,6 +68,7 @@ public class HelloSyncActivity extends Activity {
     private void createUser() {
         // Each time create new user.
         email = Long.toString(System.currentTimeMillis()) + email;
+        userName = userName + Long.toString(System.currentTimeMillis());
         KiiUMInfo umInfo = new KiiUMInfo(this, email, PASSWORD, ACCOUNT_TYPE_EMAIL, email);
 
         // Cache is for accessing WebUI later.

@@ -35,16 +35,19 @@
                 android:resource="@xml/pfsyncservice_logconfig" />
         </service>
 
-        <!-- Authority should be com.kii.sync.generic.{APPLICATION ID} -->
+        <!-- Authority must be com.kii.sync.generic.{APPLICATION ID}.{identifier} 
+        .{identifier} is optional. it is used when publishing multiple application which has same {APPLICATION ID} -->
         <provider
-            android:authorities="com.kii.sync.generic.c42a57d0"
+            android:authorities="com.kii.sync.generic.0adcd3b5"
             android:label="generic content provider"
             android:name="com.kii.sync.provider.GenericSyncProvider" >
-            <meta-data
-                android:name="app-key"
-                android:value="224b6595df9387530feb6f696a51c658" />
         </provider>
-
-    </application>
+        <meta-data
+            android:name="app-id"
+            android:value="0adcd3b5" />
+        <meta-data
+            android:name="app-key"
+            android:value="d4abbf222b7cce341940a10b41806514" />
+        </application>
 
 </manifest>

@@ -5,12 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.json.JSONException;
-
-import com.kii.cloud.storage.EasyClient;
-import com.kii.cloud.storage.dataType.KiiUser;
-import com.kii.cloud.storage.manager.AuthManager;
-import com.kii.cloud.storage.response.CloudExecutionException;
+import com.kii.cloud.storage.exception.CloudExecutionException;
 import com.kii.mobilesdk.bridge.KiiUMInfo;
 import com.kii.sync.KiiClient;
 import com.kii.sync.KiiFile;
@@ -30,10 +25,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.kii.cloud.storage.*;
 
 public class HelloSyncActivity extends Activity {
     KiiClient kiiClient;
-    AuthManager authMan;
     Handler myHandler;
     String userName = "testUser";
     String email ="helloSync@testkii.com";
@@ -75,25 +70,17 @@ public class HelloSyncActivity extends Activity {
         appId = umInfo.getAppId();
         appKey = umInfo.getAppKey();
 
-        EasyClient.start(this, appId, appKey);
-        EasyClient.getInstance().setBaseURL("http://dev-usergrid.kii.com:12110");
-        authMan = EasyClient.getUserManager();
-        KiiUser kUser = new KiiUser();
-        // Create User by communicating KiiCloud with User Manager SDK.
+        com.kii.cloud.storage.KiiClient.initialize(appId, appKey,
+                "http://dev-usergrid.kii.com:12110");
         try {
-            kUser.setUsername(userName);
-            kUser.setEmail(email);
-            authMan.createUser(kUser, PASSWORD);
-            authMan.login(email, PASSWORD);
-        } catch (CloudExecutionException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Create user Failed!");
+            new KiiUser().register(userName, "1234");
+            KiiUser.logIn(userName, "1234");
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Create user Failed!");
-        } catch (JSONException e) {
+            throw new RuntimeException("Auth failed.");
+        } catch (CloudExecutionException e) {
             e.printStackTrace();
-            throw new RuntimeException("Create user Failed!");
+            throw new RuntimeException("Auth failed.");
         }
         // Pass the User Information to Sync SDK.
         kiiClient.setKiiUMInfo(umInfo);

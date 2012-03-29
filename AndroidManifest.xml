@@ -38,16 +38,16 @@
         <!-- Authority must be com.kii.sync.generic.{APPLICATION ID}.{identifier} 
         .{identifier} is optional. it is used when publishing multiple application which has same {APPLICATION ID} -->
         <provider
-            android:authorities="com.kii.sync.generic.0adcd3b5"
+            android:authorities="com.kii.sync.generic.00b68ede"
             android:label="generic content provider"
             android:name="com.kii.sync.provider.GenericSyncProvider" >
         </provider>
         <meta-data
             android:name="app-id"
-            android:value="0adcd3b5" />
+            android:value="00b68ede" />00b68ede
         <meta-data
             android:name="app-key"
-            android:value="d4abbf222b7cce341940a10b41806514" />
+            android:value="cd1437c95582c5443cadeb92c57d0ab8" />
         </application>
 
 </manifest>

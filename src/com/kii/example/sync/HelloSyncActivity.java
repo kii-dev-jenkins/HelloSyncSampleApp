@@ -31,7 +31,6 @@ public class HelloSyncActivity extends Activity {
     KiiClient kiiClient;
     Handler myHandler;
     String userName = "testUser";
-    String email ="helloSync@testkii.com";
     static final String PASSWORD = "1234";
     static final String ACCOUNT_TYPE_KII = "KII_ID";
     static final String ACCOUNT_TYPE_EMAIL = "EMAIL";
@@ -43,7 +42,7 @@ public class HelloSyncActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         kiiClient = KiiClient.getInstance(this.getApplicationContext());
-        kiiClient.setServerBaseUrl("http://dev-usergrid.kii.com");
+        kiiClient.setServerBaseUrl("http://api.kii.com");
 
         myHandler = new Handler();
         myHandler.post(new Runnable() {
@@ -62,19 +61,19 @@ public class HelloSyncActivity extends Activity {
 
     private void createUser() {
         // Each time create new user.
-        email = Long.toString(System.currentTimeMillis()) + email;
         userName = userName + Long.toString(System.currentTimeMillis());
-        KiiUMInfo umInfo = new KiiUMInfo(this, email, PASSWORD, ACCOUNT_TYPE_EMAIL, email);
+        KiiUMInfo umInfo = new KiiUMInfo(this, userName, PASSWORD, ACCOUNT_TYPE_KII, userName);
 
         // Cache is for accessing WebUI later.
         appId = umInfo.getAppId();
         appKey = umInfo.getAppKey();
 
         com.kii.cloud.storage.KiiClient.initialize(appId, appKey,
-                "http://dev-usergrid.kii.com:12110");
+                "http://api.kii.com/app/api");
+
         try {
-            new KiiUser().register(userName, "1234");
-            KiiUser.logIn(userName, "1234");
+            new KiiUser().register(userName, PASSWORD);
+            KiiUser.logIn(userName, PASSWORD);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Auth failed.");
@@ -108,6 +107,8 @@ public class HelloSyncActivity extends Activity {
         File f = new File(Environment.getExternalStorageDirectory(),
                 "hello.txt");
         try {
+            if (f.exists())
+                f.delete();
             f.createNewFile();
             PrintWriter p = new PrintWriter(f);
             p.write("Hello, Sync");
@@ -132,7 +133,7 @@ public class HelloSyncActivity extends Activity {
                 linkURL.setVisibility(View.VISIBLE);
 
                 EditText userNameET = (EditText)HelloSyncActivity.this.findViewById(R.id.username_disp);
-                userNameET.setText(email);
+                userNameET.setText(userName);
                 userNameET.setVisibility(View.VISIBLE);
             }
         });
@@ -142,7 +143,7 @@ public class HelloSyncActivity extends Activity {
         Uri.Builder b = new Uri.Builder();
         Log.v("HelloSync", Base64.encodeToString((appId+":"+appKey).getBytes(), Base64.DEFAULT));
         String lUrl = b.scheme("http")
-                .authority("dev-usergrid.kii.com")
+                .authority("api.kii.com")
                 .appendQueryParameter(
                         "app",
                         Base64.encodeToString(
